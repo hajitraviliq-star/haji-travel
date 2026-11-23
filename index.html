@@ -142,7 +142,8 @@ async function loadProducts(){var results=await Promise.all([supabaseClient.from
   if(isOwner){$("adminAuthMessage").textContent="";$("adminEmail").value="";$("adminPassword").value="";renderAdmin()}
 }
 function openAdmin(){$("adminPanel").className="show";updateAdminView()}
-function renderAdmin(){if(!$("adminList"))return;$("adminList").innerHTML=P.map(function(x,i){return '<div class="admin-row"><span>'+x.n+' — '+fmt(x.p)+'</span><button type="button" data-remove-product="'+i+'">سڕینەوە</button></div>'}).join("");$("adminCategoriesList").innerHTML=categoriesData.map(function(x){return '<div class="platform-entry">'+(x.img?'<img alt="" src="'+x.img+'">':'')+'<span>'+x.name+'</span>'+(x.link?'<a href="'+x.link+'" target="_blank" rel="noopener">لینک</a>':'')+'</div>'}).join("")}`r`nasync function removeProduct(index){
+function renderAdmin(){if(!$("adminList"))return;$("adminList").innerHTML=P.map(function(x,i){return '<div class="admin-row"><span>'+x.n+' — '+fmt(x.p)+'</span><button type="button" data-remove-product="'+i+'">سڕینەوە</button></div>'}).join("");$("adminCategoriesList").innerHTML=categoriesData.map(function(x){return '<div class="platform-entry">'+(x.img?'<img alt="" src="'+x.img+'">':'')+'<span>'+x.name+'</span>'+(x.link?'<a href="'+x.link+'" target="_blank" rel="noopener">لینک</a>':'')+'</div>'}).join("")}
+async function removeProduct(index){
   var product=P[index];if(!product)return;
   if(!confirm("ئەم بەرهەمە بسڕیتەوە؟"))return;
   var result=await supabaseClient.from("products").delete().eq("id",product.id);
@@ -233,6 +234,7 @@ $("adminManager").addEventListener("click",function(e){var button=e.target.close
 tabs();grid();render();loadProducts();</script>
 </body>
 </html>
+
 
 
 
