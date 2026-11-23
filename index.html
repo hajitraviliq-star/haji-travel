@@ -21,7 +21,7 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var
 .hero p{margin:0 0 18px;color:var(--muted)}
 .cta{display:inline-block;background:var(--accent);color:var(--accent-text);padding:10px 24px;border-radius:12px;text-decoration:none;font-weight:600}
 main{max-width:1000px;margin:0 auto;padding:20px 16px 80px}
-.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;overflow:visible;padding-bottom:8px;margin-bottom:14px}
 .tab{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:99px;padding:6px 16px;font:inherit;cursor:pointer}
 .tab.on{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
@@ -52,7 +52,7 @@ footer{text-align:center;color:var(--muted);font-size:14px;padding:20px 16px cal
 .admin-close{background:var(--bg);color:var(--text);border:1px solid var(--line)!important}
 .admin-row{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--line);padding:8px 0}
 .admin-row button{border:0;background:#dc2626;color:#fff;border-radius:8px;padding:5px 9px;font:inherit;cursor:pointer}
-</style>
+.admin-field select{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:10px;font:inherit}.tab{display:flex;align-items:center;gap:8px}.platform-thumb{width:30px;height:30px;object-fit:cover;border-radius:50%}.platform-manage{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:12px}.platform-manage input{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:10px;font:inherit}.platform-entry{display:flex;align-items:center;gap:8px;border-top:1px solid var(--line);padding:7px 0}.platform-entry img{width:34px;height:34px;object-fit:cover;border-radius:8px}.admin-tabs{display:flex;gap:8px;margin:8px 0 14px}.admin-tab{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:9px;font:inherit;cursor:pointer}.admin-tab.on{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}.admin-field select{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:10px;font:inherit}.platform-group{display:flex;align-items:center;gap:4px}.platform-link{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--accent);text-decoration:none;font-weight:800}</style>
 </head>
 <body>
 <header>
@@ -80,16 +80,28 @@ footer{text-align:center;color:var(--muted);font-size:14px;padding:20px 16px cal
     <div class="msg" id="adminAuthMessage"></div>
   </div>
   <div id="adminManager" style="display:none">
-    <h3 style="margin:0">بەڕێوەبردنی بەرهەمەکان</h3>
-    <div class="admin-field"><label for="adminName">ناوی بەرهەم</label><input id="adminName" type="text"></div>
-    <div class="admin-field"><label for="adminPrice">نرخ (دینار)</label><input id="adminPrice" type="number" min="0"></div>
-    <div class="admin-field"><label for="adminCategory">جۆر</label><input id="adminCategory" type="text" value="ئامێری دەنگ"></div>
-    <div class="admin-field"><label for="adminImage">وێنە</label><input id="adminImage" type="file" accept="image/*"></div>
-    <div class="admin-actions">
-      <button class="admin-save" id="adminSave" type="button">زیادکردن</button>
-      <button class="admin-close" id="adminLogout" type="button">چوونەدەرەوە</button>
+    <h3 style="margin:0">بەڕێوەبردنی فرۆشگا</h3>
+    <div class="admin-tabs">
+      <button class="admin-tab on" type="button" data-admin-section="platforms">پلاتفۆرمەکان</button>
+      <button class="admin-tab" type="button" data-admin-section="products">بەرهەمەکان</button>
     </div>
-    <div id="adminList" style="margin-top:12px"></div>
+    <section id="adminPlatformsSection">
+      <h4 style="margin:0">زیادکردنی پلاتفۆرم</h4>
+      <div class="admin-field"><label for="newCategoryName">ناوی پلاتفۆرم / پۆل</label><input id="newCategoryName" type="text"></div>
+      <div class="admin-field"><label for="newCategoryImage">وێنەی پلاتفۆرم</label><input id="newCategoryImage" type="file" accept="image/*"></div>
+      <div class="admin-field"><label for="newCategoryLink">لینکی پلاتفۆرم</label><input id="newCategoryLink" type="url" placeholder="https://..."></div>
+      <div class="admin-actions"><button class="admin-save" id="addCategoryButton" type="button">زیادکردنی پلاتفۆرم</button></div>
+      <div id="adminCategoriesList" style="margin-top:12px"></div>
+    </section>
+    <section id="adminProductsSection" style="display:none">
+      <h4 style="margin:0">زیادکردنی بەرهەم</h4>
+      <div class="admin-field"><label for="adminName">ناوی بەرهەم</label><input id="adminName" type="text"></div>
+      <div class="admin-field"><label for="adminPrice">نرخ (دینار)</label><input id="adminPrice" type="number" min="0"></div>
+      <div class="admin-field"><label for="adminCategory">پلاتفۆرم / پۆل</label><select id="adminCategory"></select></div>
+      <div class="admin-field"><label for="adminImage">وێنەی بەرهەم</label><input id="adminImage" type="file" accept="image/*"></div>
+      <div class="admin-actions"><button class="admin-save" id="adminSave" type="button">زیادکردنی بەرهەم</button><button class="admin-close" id="adminLogout" type="button">چوونەدەرەوە</button></div>
+      <div id="adminList" style="margin-top:12px"></div>
+    </section>
   </div>
 </div>
 <div id="ov"><div id="drawer">
@@ -108,28 +120,21 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_aji3OvC90vg07TJgTjvICA_5jh76i-a
 const ADMIN_UID = "1fdee3f6-8128-4bbb-a36f-c7ece8c04f72";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 var P=[];
-var cats=["هەموو"],cur="هەموو",cart={};
+var categoriesData=[],cats=["هەموو"],cur="هەموو",cart={};
 var logoClicks=0,logoTimer=null,currentUser=null;
 function $(i){return document.getElementById(i)}
 function fmt(n){return Number(n).toLocaleString("en-US")+" دینار"}
-function tabs(){$("tabs").innerHTML=cats.map(function(c){return '<button class="tab'+(c===cur?' on':'')+'" data-c="'+c+'">'+c+'</button>'}).join("")}
-function grid(){$("grid").innerHTML=P.map(function(x,i){return (cur==="هەموو"||x.c===cur)?'<div class="card">'+(x.img?'<img class="pimg" alt="'+x.n+'" src="'+x.img+'">':'<div class="emoji">'+(x.e||"📦")+'</div>')+'<div class="name">'+x.n+'</div><div class="price">'+fmt(x.p)+'</div><button class="add" data-i="'+i+'">زیادکردن</button></div>':''}).join("")}
+function tabs(){
+  $("tabs").innerHTML=cats.map(function(c){var item=categoriesData.find(function(x){return x.name===c});var thumb=item&&item.img?'<img class="platform-thumb" alt="" src="'+item.img+'">':'';var button='<button class="tab'+(c===cur?' on':'')+'" data-c="'+c+'">'+thumb+'<span>'+c+'</span></button>';var link=item&&item.link?'<a class="platform-link" href="'+item.link+'" target="_blank" rel="noopener" aria-label="بەستەری '+c+'">↗</a>':'';return '<div class="platform-group">'+button+link+'</div>'}).join("")
+}function grid(){$("grid").innerHTML=P.map(function(x,i){return (cur==="هەموو"||x.c===cur)?'<div class="card">'+(x.img?'<img class="pimg" alt="'+x.n+'" src="'+x.img+'">':'<div class="emoji">'+(x.e||"📦")+'</div>')+'<div class="name">'+x.n+'</div><div class="price">'+fmt(x.p)+'</div><button class="add" data-i="'+i+'">زیادکردن</button></div>':''}).join("")}
 function render(){
   var ids=Object.keys(cart),sum=0,cnt=0;
   $("items").innerHTML=ids.length?ids.map(function(i){var x=P[i],q=cart[i];if(!x)return "";sum+=Number(x.p)*q;cnt+=q;return '<div class="row"><span>'+(x.e||"📦")+'</span><div class="t">'+x.n+'<div class="price">'+fmt(Number(x.p)*q)+'</div></div><div class="qty"><button data-m="'+i+'">−</button> '+q+' <button data-a="'+i+'">+</button></div></div>'}).join(""):'<p style="color:var(--muted)">سەبەتەکەت بەتاڵە</p>';
   $("sum").textContent=fmt(sum);$("count").textContent=cnt;
 }
-function refreshProducts(){
-  cats=["هەموو"].concat(Array.from(new Set(P.map(function(x){return x.c||"ئەنجاو"}))));
-  cur="هەموو";tabs();grid();renderAdmin();render();
-}
-async function loadProducts(){
-  var result=await supabaseClient.from("products").select("id,n,e,p,c,img").order("created_at",{ascending:false});
-  if(result.error){console.error(result.error);alert("نەتوانرا بەرهەمەکان باربکرێن. دڵنیابە SQL ـەکە بە سەرکەوتوویی جێبەجێ بووە.");return}
-  P=(result.data||[]).map(function(x){x.p=Number(x.p);return x});
-  cart={};refreshProducts();
-}
-function updateAdminView(){
+function populateCategorySelect(){var select=$("adminCategory");if(!select)return;select.innerHTML=categoriesData.map(function(x){return '<option value="'+x.name+'">'+x.name+'</option>'}).join("");if(!categoriesData.length)select.innerHTML='<option value="">سەرەتا پلاتفۆرم زیاد بکە</option>'}
+function refreshProducts(){cats=["هەموو"].concat(Array.from(new Set(categoriesData.map(function(x){return x.name}).concat(P.map(function(x){return x.c||"ئەنجاو"})))));cur="هەموو";populateCategorySelect();tabs();grid();renderAdmin();render()}
+async function loadProducts(){var results=await Promise.all([supabaseClient.from("products").select("id,n,e,p,c,img").order("created_at",{ascending:false}),supabaseClient.from("categories").select("id,name,img,link").order("created_at",{ascending:true})]);if(results[0].error||results[1].error){var err=results[0].error||results[1].error;console.error(err);alert("نەتوانرا بەرهەم و پلاتفۆرمەکان باربکرێن. دڵنیابە SQL ـەکانی Supabase جێبەجێ کراون.");return}P=(results[0].data||[]).map(function(x){x.p=Number(x.p);return x});categoriesData=results[1].data||[];cart={};refreshProducts()}function updateAdminView(){
   var isOwner=!!(currentUser&&currentUser.id===ADMIN_UID);
   $("adminLogin").style.display=isOwner?"none":"block";
   $("adminManager").style.display=isOwner?"block":"none";
@@ -137,11 +142,7 @@ function updateAdminView(){
   if(isOwner){$("adminAuthMessage").textContent="";$("adminEmail").value="";$("adminPassword").value="";renderAdmin()}
 }
 function openAdmin(){$("adminPanel").className="show";updateAdminView()}
-function renderAdmin(){
-  if(!$("adminList"))return;
-  $("adminList").innerHTML=P.map(function(x,i){return '<div class="admin-row"><span>'+x.n+' — '+fmt(x.p)+'</span><button type="button" data-remove-product="'+i+'">سڕینەوە</button></div>'}).join("");
-}
-async function removeProduct(index){
+function renderAdmin(){if(!$("adminList"))return;$("adminList").innerHTML=P.map(function(x,i){return '<div class="admin-row"><span>'+x.n+' — '+fmt(x.p)+'</span><button type="button" data-remove-product="'+i+'">سڕینەوە</button></div>'}).join("");$("adminCategoriesList").innerHTML=categoriesData.map(function(x){return '<div class="platform-entry">'+(x.img?'<img alt="" src="'+x.img+'">':'')+'<span>'+x.name+'</span>'+(x.link?'<a href="'+x.link+'" target="_blank" rel="noopener">لینک</a>':'')+'</div>'}).join("")}`r`nasync function removeProduct(index){
   var product=P[index];if(!product)return;
   if(!confirm("ئەم بەرهەمە بسڕیتەوە؟"))return;
   var result=await supabaseClient.from("products").delete().eq("id",product.id);
@@ -186,10 +187,35 @@ $("adminPassword").addEventListener("keydown",function(e){if(e.key==="Enter")$("
 $("adminLogout").addEventListener("click",async function(){await supabaseClient.auth.signOut();currentUser=null;updateAdminView()});
 supabaseClient.auth.getSession().then(function(result){currentUser=result.data.session?result.data.session.user:null;updateAdminView()});
 supabaseClient.auth.onAuthStateChange(function(_event,session){currentUser=session?session.user:null;updateAdminView()});
-$("adminSave").addEventListener("click",async function(){
+$("adminManager").addEventListener("click",function(e){var button=e.target.closest("[data-admin-section]");if(!button)return;var section=button.dataset.adminSection;$("adminPlatformsSection").style.display=section==="platforms"?"block":"none";$("adminProductsSection").style.display=section==="products"?"block":"none";document.querySelectorAll(".admin-tab").forEach(function(x){x.classList.toggle("on",x===button)})});$("addCategoryButton").addEventListener("click",async function(){
+  if(!currentUser||currentUser.id!==ADMIN_UID){alert("تەنها بەڕێوەبەر دەتوانێت پلاتفۆرم زیاد بکات.");return}
+  var name=$("newCategoryName").value.trim(),file=$("newCategoryImage").files[0],link=$("newCategoryLink").value.trim();
+  if(!name||!file||!link){alert("ناوی پلاتفۆرم، وێنە و لینکەکەی پڕ بکەرەوە.");return}try{var parsedLink=new URL(link);if(parsedLink.protocol!=="https:"&&parsedLink.protocol!=="http:")throw new Error();link=parsedLink.href}catch(e){alert("لینکی دروست بە https:// یان http:// بنووسە.");return}
+  if(categoriesData.some(function(x){return x.name.toLowerCase()===name.toLowerCase()})){alert("ئەم پلاتفۆرمە پێشتر هەیە.");return}
+  var safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");var path="categories/"+Date.now()+"-"+Math.random().toString(36).slice(2)+"-"+safeName;
+  var upload=await supabaseClient.storage.from("products").upload(path,file,{contentType:file.type,upsert:false});
+  if(upload.error){alert("بارکردنی وێنە سەرکەوتوو نەبوو: "+upload.error.message);return}
+  var url=supabaseClient.storage.from("products").getPublicUrl(path).data.publicUrl;
+  var result=await supabaseClient.from("categories").insert({name:name,img:url,link:link}).select("id,name,img,link").single();
+  if(result.error){alert("زیادکردنی پلاتفۆرم سەرکەوتوو نەبوو: "+result.error.message);return}
+  categoriesData.push(result.data);$("newCategoryName").value="";$("newCategoryImage").value="";$("newCategoryLink").value="";refreshProducts();
+});$("adminManager").addEventListener("click",function(e){var button=e.target.closest("[data-admin-section]");if(!button)return;var section=button.dataset.adminSection;$("adminPlatformsSection").style.display=section==="platforms"?"block":"none";$("adminProductsSection").style.display=section==="products"?"block":"none";document.querySelectorAll(".admin-tab").forEach(function(x){x.classList.toggle("on",x===button)})});$("addCategoryButton").addEventListener("click",async function(){
+  if(!currentUser||currentUser.id!==ADMIN_UID){alert("تەنها بەڕێوەبەر دەتوانێت پلاتفۆرم زیاد بکات.");return}
+  var name=$("newCategoryName").value.trim(),file=$("newCategoryImage").files[0],link=$("newCategoryLink").value.trim();
+  if(!name||!file||!link){alert("ناوی پلاتفۆرم، وێنە و لینکەکەی پڕ بکەرەوە.");return}try{var parsedLink=new URL(link);if(parsedLink.protocol!=="https:"&&parsedLink.protocol!=="http:")throw new Error();link=parsedLink.href}catch(e){alert("لینکی دروست بە https:// یان http:// بنووسە.");return}
+  if(categoriesData.some(function(x){return x.name.toLowerCase()===name.toLowerCase()})){alert("ئەم پلاتفۆرمە پێشتر هەیە.");return}
+  var safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+  var path="categories/"+Date.now()+"-"+Math.random().toString(36).slice(2)+"-"+safeName;
+  var upload=await supabaseClient.storage.from("products").upload(path,file,{contentType:file.type,upsert:false});
+  if(upload.error){alert("بارکردنی وێنە سەرکەوتوو نەبوو: "+upload.error.message);return}
+  var url=supabaseClient.storage.from("products").getPublicUrl(path).data.publicUrl;
+  var result=await supabaseClient.from("categories").insert({name:name,img:url,link:link}).select("id,name,img,link").single();
+  if(result.error){alert("زیادکردنی پلاتفۆرم سەرکەوتوو نەبوو: "+result.error.message);return}
+  categoriesData.push(result.data);$("newCategoryName").value="";$("newCategoryImage").value="";$("newCategoryLink").value="";refreshProducts();
+});$("adminSave").addEventListener("click",async function(){
   if(!currentUser||currentUser.id!==ADMIN_UID){alert("تەنها بەڕێوەبەر دەتوانێت بەرهەم زیاد بکات.");return}
   var name=$("adminName").value.trim(),price=Number($("adminPrice").value),category=$("adminCategory").value.trim(),file=$("adminImage").files[0];
-  if(!name||!Number.isFinite(price)||price<0){alert("ناو و نرخ بنووسە");return}
+  if(!name||!Number.isFinite(price)||price<0){alert("ناو و نرخ بنووسە");return}if(!category){alert("سەرەتا پلاتفۆرمێک زیاد بکە و هەڵیبژێرە.");return}if(!category){alert("سەرەتا پلاتفۆرمێک زیاد بکە و هەڵیبژێرە.");return}
   var imageUrl=null;
   if(file){
     var safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
@@ -201,10 +227,16 @@ $("adminSave").addEventListener("click",async function(){
   var inserted=await supabaseClient.from("products").insert({n:name,e:"📦",p:price,c:category||"ئەنجاو",img:imageUrl}).select("id,n,e,p,c,img").single();
   if(inserted.error){alert("زیادکردنی بەرهەم سەرکەوتوو نەبوو: "+inserted.error.message);return}
   inserted.data.p=Number(inserted.data.p);P.unshift(inserted.data);
-  $("adminName").value="";$("adminPrice").value="";$("adminCategory").value="ئامێری دەنگ";$("adminImage").value="";
+  $("adminName").value="";$("adminPrice").value="";$("adminCategory").selectedIndex=0;$("adminImage").value="";
   refreshProducts();
 });
 tabs();grid();render();loadProducts();</script>
 </body>
 </html>
+
+
+
+
+
+
 
