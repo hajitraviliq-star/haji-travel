@@ -52,7 +52,7 @@ footer{text-align:center;color:var(--muted);font-size:14px;padding:20px 16px cal
 .admin-close{background:var(--bg);color:var(--text);border:1px solid var(--line)!important}
 .admin-row{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--line);padding:8px 0}
 .admin-row button{border:0;background:#dc2626;color:#fff;border-radius:8px;padding:5px 9px;font:inherit;cursor:pointer}
-.admin-field select{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:10px;font:inherit}.tab{display:flex;align-items:center;gap:8px}.platform-thumb{width:30px;height:30px;object-fit:cover;border-radius:50%}.platform-manage{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:12px}.platform-manage input{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:10px;font:inherit}.platform-entry{display:flex;align-items:center;gap:8px;border-top:1px solid var(--line);padding:7px 0}.platform-entry img{width:34px;height:34px;object-fit:cover;border-radius:8px}.admin-tabs{display:flex;gap:8px;margin:8px 0 14px}.admin-tab{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:9px;font:inherit;cursor:pointer}.admin-tab.on{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}.admin-field select{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:10px;font:inherit}.platform-group{display:flex;align-items:center;gap:4px}.platform-link{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--accent);text-decoration:none;font-weight:800}@media(max-width:420px){header{gap:6px;padding:10px}.logo{font-size:15px}.cartbtn{font-size:12px;padding:6px 8px}}</style>
+.admin-field select{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:10px;font:inherit}.tab{display:flex;align-items:center;gap:8px}.platform-thumb{width:30px;height:30px;object-fit:cover;border-radius:50%}.platform-manage{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:12px}.platform-manage input{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:10px;font:inherit}.platform-entry{display:flex;align-items:center;gap:8px;border-top:1px solid var(--line);padding:7px 0}.platform-entry img{width:34px;height:34px;object-fit:cover;border-radius:8px}.admin-tabs{display:flex;gap:8px;margin:8px 0 14px}.admin-tab{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:9px;font:inherit;cursor:pointer}.admin-tab.on{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}.admin-field select{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:10px;font:inherit}.platform-group{display:flex;align-items:center;gap:4px}.platform-link{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--accent);text-decoration:none;font-weight:800}.platform-tab{text-decoration:none}@media(max-width:420px){header{gap:6px;padding:10px}.logo{font-size:15px}.cartbtn{font-size:12px;padding:6px 8px}}</style>
 </head>
 <body>
 <header>
@@ -97,7 +97,7 @@ footer{text-align:center;color:var(--muted);font-size:14px;padding:20px 16px cal
       <h4 style="margin:0">زیادکردنی بەرهەم</h4>
       <div class="admin-field"><label for="adminName">ناوی بەرهەم</label><input id="adminName" type="text"></div>
       <div class="admin-field"><label for="adminPrice">نرخ (دینار)</label><input id="adminPrice" type="number" min="0"></div>
-      <div class="admin-field"><label for="adminCategory">پلاتفۆرم / پۆل</label><select id="adminCategory"></select></div>
+      
       <div class="admin-field"><label for="adminImage">وێنەی بەرهەم</label><input id="adminImage" type="file" accept="image/*"></div>
       <div class="admin-actions"><button class="admin-save" id="adminSave" type="button">زیادکردنی بەرهەم</button><button class="admin-close" id="adminLogout" type="button">چوونەدەرەوە</button></div>
       <div id="adminList" style="margin-top:12px"></div>
@@ -125,15 +125,16 @@ var logoClicks=0,logoTimer=null,currentUser=null;
 function $(i){return document.getElementById(i)}
 function fmt(n){return Number(n).toLocaleString("en-US")+" دینار"}
 function tabs(){
-  $("tabs").innerHTML=cats.map(function(c){var item=categoriesData.find(function(x){return x.name===c});var thumb=item&&item.img?'<img class="platform-thumb" alt="" src="'+item.img+'">':'';var button='<button class="tab'+(c===cur?' on':'')+'" data-c="'+c+'">'+thumb+'<span>'+c+'</span></button>';var link=item&&item.link?'<a class="platform-link" href="'+item.link+'" target="_blank" rel="noopener" aria-label="بەستەری '+c+'">↗</a>':'';return '<div class="platform-group">'+button+link+'</div>'}).join("")
+  var allButton='<button class="tab'+(cur==="هەموو"?' on':'')+'" data-c="هەموو">هەموو</button>';
+  var platforms=categoriesData.map(function(item){var thumb=item.img?'<img class="platform-thumb" alt="" src="'+item.img+'">':'';return '<a class="tab platform-tab" href="'+item.link+'" target="_blank" rel="noopener">'+thumb+'<span>'+item.name+'</span><span aria-hidden="true">↗</span></a>'}).join("");
+  $("tabs").innerHTML=allButton+platforms;
 }function grid(){$("grid").innerHTML=P.map(function(x,i){return (cur==="هەموو"||x.c===cur)?'<div class="card">'+(x.img?'<img class="pimg" alt="'+x.n+'" src="'+x.img+'">':'<div class="emoji">'+(x.e||"📦")+'</div>')+'<div class="name">'+x.n+'</div><div class="price">'+fmt(x.p)+'</div><button class="add" data-i="'+i+'">زیادکردن</button></div>':''}).join("")}
 function render(){
   var ids=Object.keys(cart),sum=0,cnt=0;
   $("items").innerHTML=ids.length?ids.map(function(i){var x=P[i],q=cart[i];if(!x)return "";sum+=Number(x.p)*q;cnt+=q;return '<div class="row"><span>'+(x.e||"📦")+'</span><div class="t">'+x.n+'<div class="price">'+fmt(Number(x.p)*q)+'</div></div><div class="qty"><button data-m="'+i+'">−</button> '+q+' <button data-a="'+i+'">+</button></div></div>'}).join(""):'<p style="color:var(--muted)">سەبەتەکەت بەتاڵە</p>';
   $("sum").textContent=fmt(sum);$("count").textContent=cnt;
 }
-function populateCategorySelect(){var select=$("adminCategory");if(!select)return;select.innerHTML=categoriesData.map(function(x){return '<option value="'+x.name+'">'+x.name+'</option>'}).join("");if(!categoriesData.length)select.innerHTML='<option value="">سەرەتا پلاتفۆرم زیاد بکە</option>'}
-function refreshProducts(){cats=["هەموو"].concat(Array.from(new Set(categoriesData.map(function(x){return x.name}).concat(P.map(function(x){return x.c||"ئەنجاو"})))));cur="هەموو";populateCategorySelect();tabs();grid();renderAdmin();render()}
+function refreshProducts(){cats=["هەموو"];cur="هەموو";tabs();grid();renderAdmin();render()}
 async function loadProducts(){var results=await Promise.all([supabaseClient.from("products").select("id,n,e,p,c,img").order("created_at",{ascending:false}),supabaseClient.from("categories").select("id,name,img,link").order("created_at",{ascending:true})]);if(results[0].error||results[1].error){var err=results[0].error||results[1].error;console.error(err);alert("نەتوانرا بەرهەم و پلاتفۆرمەکان باربکرێن. دڵنیابە SQL ـەکانی Supabase جێبەجێ کراون.");return}P=(results[0].data||[]).map(function(x){x.p=Number(x.p);return x});categoriesData=results[1].data||[];cart={};refreshProducts()}function updateAdminView(){
   var isOwner=!!(currentUser&&currentUser.id===ADMIN_UID);
   $("adminLogin").style.display=isOwner?"none":"block";
@@ -215,8 +216,8 @@ $("adminManager").addEventListener("click",function(e){var button=e.target.close
   categoriesData.push(result.data);$("newCategoryName").value="";$("newCategoryImage").value="";$("newCategoryLink").value="";refreshProducts();
 });$("adminSave").addEventListener("click",async function(){
   if(!currentUser||currentUser.id!==ADMIN_UID){alert("تەنها بەڕێوەبەر دەتوانێت بەرهەم زیاد بکات.");return}
-  var name=$("adminName").value.trim(),price=Number($("adminPrice").value),category=$("adminCategory").value.trim(),file=$("adminImage").files[0];
-  if(!name||!Number.isFinite(price)||price<0){alert("ناو و نرخ بنووسە");return}if(!category){alert("سەرەتا پلاتفۆرمێک زیاد بکە و هەڵیبژێرە.");return}if(!category){alert("سەرەتا پلاتفۆرمێک زیاد بکە و هەڵیبژێرە.");return}
+  var name=$("adminName").value.trim(),price=Number($("adminPrice").value),file=$("adminImage").files[0];
+  if(!name||!Number.isFinite(price)||price<0||!file){alert("ناو، نرخ و وێنەی بەرهەم دیاری بکە.");return}
   var imageUrl=null;
   if(file){
     var safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
@@ -225,15 +226,18 @@ $("adminManager").addEventListener("click",function(e){var button=e.target.close
     if(upload.error){alert("بارکردنی وێنە سەرکەوتوو نەبوو: "+upload.error.message);return}
     imageUrl=supabaseClient.storage.from("products").getPublicUrl(imagePath).data.publicUrl;
   }
-  var inserted=await supabaseClient.from("products").insert({n:name,e:"📦",p:price,c:category||"ئەنجاو",img:imageUrl}).select("id,n,e,p,c,img").single();
+  var inserted=await supabaseClient.from("products").insert({n:name,e:"📦",p:price,c:"هەموو",img:imageUrl}).select("id,n,e,p,c,img").single();
   if(inserted.error){alert("زیادکردنی بەرهەم سەرکەوتوو نەبوو: "+inserted.error.message);return}
   inserted.data.p=Number(inserted.data.p);P.unshift(inserted.data);
-  $("adminName").value="";$("adminPrice").value="";$("adminCategory").selectedIndex=0;$("adminImage").value="";
+  $("adminName").value="";$("adminPrice").value="";$("adminImage").value="";
   refreshProducts();
 });
 tabs();grid();render();loadProducts();</script>
 </body>
 </html>
+
+
+
 
 
 
