@@ -152,7 +152,7 @@ function renderAdmin(){if(!$("adminList"))return;$("adminList").innerHTML=P.map(
 document.addEventListener("click",function(e){
   var t=e.target;
   if(t.id==="logo"){
-    logoClicks++;clearTimeout(logoTimer);logoTimer=setTimeout(function(){logoClicks=0},700);
+    logoClicks++;clearTimeout(logoTimer);logoTimer=setTimeout(function(){logoClicks=0},2200);
     if(logoClicks===3){logoClicks=0;openAdmin()}
   }
   if(t.id==="adminClose")$("adminPanel").className="";
@@ -233,6 +233,7 @@ $("adminManager").addEventListener("click",function(e){var button=e.target.close
 tabs();grid();render();loadProducts();</script>
 </body>
 </html>
+
 
 
 
